@@ -108,3 +108,6 @@ crashlytics-build.properties
 !Packages/packages-lock.json
 
 !ProjectSettings/ProjectVersion.txt
+
+# Firebase native binaries (too large for GitHub)
+Assets/Firebase/Plugins/**
