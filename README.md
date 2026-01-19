@@ -98,4 +98,5 @@ All rights to the game, its assets, and its commercial use are reserved.
 
 ## 👤 Author
 
-**Ahsen Pehlivan**  
+**Ahsen Pehlivan**
+**Furkan Güneş** 
