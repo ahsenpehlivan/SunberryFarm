@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8ed7ba46cf87498458e541b164b826be
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - animator: {instanceID: 0}
+  - uiDocument: {instanceID: 0}
+  - grassTilemap: {instanceID: 0}
+  - groundTilemap: {instanceID: 0}
+  - soilTilemap: {instanceID: 0}
+  - soilTile: {fileID: 11400000, guid: 2b899edd568f1a440b0e1a2174f84729, type: 2}
+  - dustEffectPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
