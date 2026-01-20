@@ -111,3 +111,4 @@ crashlytics-build.properties
 
 # Firebase native binaries (too large for GitHub)
 Assets/Firebase/Plugins/**
+Assets/Plugins
