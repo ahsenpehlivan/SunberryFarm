@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+
 using System.Collections;
 using System.Collections.Generic; // List için
 using UnityEngine.Tilemaps; 
@@ -13,8 +13,7 @@ public class ClickToMove : MonoBehaviour
     [Header("Animasyon")]
     public Animator animator;
 
-    [Header("UI (opsiyonel)")]
-    public UIDocument uiDocument;
+
 
     [Header("Davranış")]
     public bool chooseDominantAxisAtClick = true;
@@ -29,8 +28,7 @@ public class ClickToMove : MonoBehaviour
     public GameObject dustEffectPrefab; // Toz efekti
     public float digDistanceThreshold = 1.1f; // Kazma mesafesi
     
-    [Tooltip("Bu sınıfa sahip UI öğeleri tıklanınca karakter hareketi engellenir.")]
-    public string blockClass = "blocks-move";
+
     
     // PATHFINDING VARIABLES
     private List<Vector3> currentPath;
@@ -53,7 +51,7 @@ public class ClickToMove : MonoBehaviour
     void Awake()
     {
         if (animator == null) animator = GetComponentInChildren<Animator>();
-        if (uiDocument == null) uiDocument = FindObjectOfType<UIDocument>();
+
     }
 
     void Update()
@@ -69,23 +67,27 @@ public class ClickToMove : MonoBehaviour
         // 2. Mouse Input
         if (Input.GetMouseButtonDown(0))
         {
-            // UI Toolkit tarafından "consume" edilmişse engelle
-            if (UIFrameGuard.ConsumedPointerDownThisFrame) return;
-
-            if (IsPointerOverUI()) return;
-
-            if (ToolPaletteController.SelectedToolName != null)
+            // --- UI BLOCK CHECK START ---
+            // EventSystem ile modern UI kontrolü
+            if (UnityEngine.EventSystems.EventSystem.current != null && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                PerformToolAction(); 
+                Debug.Log("UI Clicked (EventSystem)");
                 return;
             }
+            // --- UI BLOCK CHECK END ---
 
-            // Normal Hareket İsteği
-            var w = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 worldTarget = new Vector3(w.x, w.y, transform.position.z);
-
-            // Pathfinding kullanarak yol iste
-            RequestPath(worldTarget);
+            // 1. Tool Seçili mi?
+            if (!string.IsNullOrEmpty(ToolPaletteController.SelectedToolName))
+            {
+                PerformToolAction();
+            }
+            else
+            {
+                // 2. Hareket İsteği
+                var w = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 worldTarget = new Vector3(w.x, w.y, transform.position.z);
+                RequestPath(worldTarget); 
+            }
         }
         
         // 3. Yol Takibi
@@ -103,17 +105,18 @@ public class ClickToMove : MonoBehaviour
         }
     }
 
-    void LateUpdate()
-    {
-        UIFrameGuard.LateClear();
-    }
-
     void RequestPath(Vector3 targetPos)
     {
+        // SAFETY FIX: Instance yoksa bulmayı dene
         if (Pathfinding.Instance == null)
         {
-            Debug.LogError("Pathfinding instance bulunamadı! Sahneye Pathfinding scriptini ekleyin.");
-            return;
+             var pf = FindObjectOfType<Pathfinding>();
+             if (pf == null)
+             {
+                 Debug.LogError("Pathfinding instance bulunamadı! Sahneye Pathfinding scriptini ekleyin.");
+                 return;
+             }
+             // Instance muhtemelen Awake'te set ediliyor ama biz manuel erişelim
         }
 
         List<Vector3> path = Pathfinding.Instance.FindPath(transform.position, targetPos);
@@ -199,10 +202,45 @@ public class ClickToMove : MonoBehaviour
         // --- DIG (ÇAPA) ---
         if (tool == "Tool_Hoe")
         {
+            bool isGroundBlocked = false;
+
+            // 1. Check assigned reference logic (with correct local cell calc)
+            if (groundTilemap != null)
+            {
+                // Ensure we use the coordinate system of the groundTilemap itself
+                Vector3Int localGroundCell = groundTilemap.WorldToCell(w);
+                if (groundTilemap.HasTile(localGroundCell))
+                {
+                    isGroundBlocked = true;
+                    Debug.Log($"Blocked by assigned GroundTilemap at local {localGroundCell}");
+                }
+            }
+            
+            // 2. Fallback: Search by name if not blocked yet
+            if (!isGroundBlocked)
+            {
+                 GameObject gObj = GameObject.Find("GroundTilemap");
+                 if (gObj != null)
+                 {
+                     Tilemap tm = gObj.GetComponent<Tilemap>();
+                     if (tm != null && tm.HasTile(tm.WorldToCell(w)))
+                     {
+                         isGroundBlocked = true;
+                         Debug.Log("Blocked by found GroundTilemap object");
+                     }
+                 }
+            }
+
+            if (isGroundBlocked)
+            {
+                return;
+            }
+
             // Tile kontrollerini aynı cell ile yap
             TileBase tileOnGrass  = grassTilemap.GetTile(cell);
             TileBase tileOnVisual = (grassVisualTilemap != null) ? grassVisualTilemap.GetTile(cell) : null;
-            TileBase tileOnGround = groundTilemap.GetTile(cell);
+            // Retain original check for safety (though redundant if isGroundBlocked works)
+            TileBase tileOnGround = groundTilemap != null ? groundTilemap.GetTile(cell) : null;
             TileBase tileOnSoil   = soilTilemap.GetTile(cell);
 
             // Çim (mantıksal) VEYA görsel çim varsa izin ver
@@ -319,15 +357,7 @@ public class ClickToMove : MonoBehaviour
     
     // --- UI HELPERS ---
 
-    bool IsPointerOverUI()
-    {
-        if (UnityEngine.EventSystems.EventSystem.current != null)
-        {
-            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return true;
-            if (Input.touchCount > 0 && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) return true;
-        }
-        return false;
-    }
+
     
     // Debug amaçlı yolu çiz
     void OnDrawGizmos()

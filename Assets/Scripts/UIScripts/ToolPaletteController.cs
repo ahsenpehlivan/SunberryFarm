@@ -24,11 +24,11 @@ public class ToolPaletteController : MonoBehaviour
     private bool isOpen;
     private IVisualElementScheduledItem anim;
     private float t0, h0, h1, o0, o1;
-    private void StopAll(EventBase e)
-    {
-        UIFrameGuard.ConsumedPointerDownThisFrame = true; // << EKLENDİ
-        e.StopImmediatePropagation();
-    }
+    // private void StopAll(EventBase e)
+    // {
+    //    UIFrameGuard.ConsumedPointerDownThisFrame = true;
+    //    e.StopImmediatePropagation();
+    // }
 
     private VisualElement selectedTool;
     public static string SelectedToolName { get; private set; }
@@ -62,10 +62,10 @@ public class ToolPaletteController : MonoBehaviour
         // Add blocking class so ClickToMove detects it
         // toolPalette.AddToClassList("blocks-move"); // DEPRECATED: Using UIFrameGuard now
 
-        // ToolPalette içindeki pointer olaylarını tüket
-        toolPalette.RegisterCallback<PointerDownEvent>(StopAll, TrickleDown.TrickleDown);
-        toolPalette.RegisterCallback<PointerUpEvent>(StopAll,   TrickleDown.TrickleDown);
-        toolPalette.RegisterCallback<WheelEvent>(StopAll,       TrickleDown.TrickleDown);
+        // CLEAN SLATE: Removed blocking callbacks
+        // toolPalette.RegisterCallback<PointerDownEvent>(StopAll, TrickleDown.TrickleDown);
+        // toolPalette.RegisterCallback<PointerUpEvent>(StopAll,   TrickleDown.TrickleDown);
+        // toolPalette.RegisterCallback<WheelEvent>(StopAll,       TrickleDown.TrickleDown);
 
         bottomRightButton.pickingMode = PickingMode.Position;
         toolPalette.pickingMode       = PickingMode.Position;
@@ -120,8 +120,8 @@ public class ToolPaletteController : MonoBehaviour
 
         bottomRightButton.RegisterCallback<ClickEvent>(OnBottomRightClick);
         // UIFrameGuard için consume
-        bottomRightButton.RegisterCallback<PointerDownEvent>(StopAll, TrickleDown.TrickleDown);
-        bottomRightButton.RegisterCallback<PointerUpEvent>(StopAll, TrickleDown.TrickleDown);
+        // bottomRightButton.RegisterCallback<PointerDownEvent>(StopAll, TrickleDown.TrickleDown);
+        // bottomRightButton.RegisterCallback<PointerUpEvent>(StopAll, TrickleDown.TrickleDown);
     }
 
     // Paleti butonun hemen üstüne hizalar
@@ -237,7 +237,6 @@ public class ToolPaletteController : MonoBehaviour
 
     void OnToolClick(ClickEvent e)
     {
-        UIFrameGuard.ConsumedPointerDownThisFrame = true;
 
         e.StopImmediatePropagation();
 
