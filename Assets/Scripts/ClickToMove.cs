@@ -69,10 +69,27 @@ public class ClickToMove : MonoBehaviour
         {
             // --- UI BLOCK CHECK START ---
             // EventSystem ile modern UI kontrolü
-            if (UnityEngine.EventSystems.EventSystem.current != null && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            // --- UI BLOCK CHECK START ---
+            // EventSystem ile modern UI kontrolü
+            if (UnityEngine.EventSystems.EventSystem.current != null)
             {
-                Debug.Log("UI Clicked (EventSystem)");
-                return;
+                if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+                {
+                    Debug.Log("UI Clicked (EventSystem)");
+                    
+                    // DEBUG: Hangi objenin tiklamayi kestigini bulalim
+                    var pointerData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
+                    pointerData.position = Input.mousePosition;
+                    var results = new List<UnityEngine.EventSystems.RaycastResult>();
+                    UnityEngine.EventSystems.EventSystem.current.RaycastAll(pointerData, results);
+                    
+                    if (results.Count > 0)
+                    {
+                        Debug.Log($"Blocking UI Element: {results[0].gameObject.name} (Layer: {LayerMask.LayerToName(results[0].gameObject.layer)})");
+                    }
+                    
+                    return;
+                }
             }
             // --- UI BLOCK CHECK END ---
 
