@@ -34,6 +34,8 @@ public class ToolPaletteController : MonoBehaviour
     public static string SelectedToolName { get; private set; }
     public static bool JustClickedTool;
 
+    public static event System.Action<string> OnToolChanged;
+
     void Reset() { uiDocument = GetComponent<UIDocument>(); }
     void Awake() { if (!uiDocument) uiDocument = GetComponent<UIDocument>(); }
 
@@ -68,7 +70,10 @@ public class ToolPaletteController : MonoBehaviour
         // toolPalette.RegisterCallback<WheelEvent>(StopAll,       TrickleDown.TrickleDown);
 
         bottomRightButton.pickingMode = PickingMode.Position;
-        toolPalette.pickingMode       = PickingMode.Position;
+        toolPalette.pickingMode       = PickingMode.Ignore; // Container ignores clicks
+
+        // Ensure the root container doesn't block clicks on the rest of the screen
+        root.pickingMode = PickingMode.Ignore;
 
         // HOIST: paleti köke taşı
         toolPalette.RemoveFromHierarchy();
@@ -199,6 +204,7 @@ public class ToolPaletteController : MonoBehaviour
         {
             if (toolPalette[i] is VisualElement ve)
             {
+                ve.pickingMode  = PickingMode.Position; // Children capture clicks
                 ve.style.width  = itemSizePx;
                 ve.style.height = itemSizePx;
                 ve.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
@@ -248,6 +254,7 @@ public class ToolPaletteController : MonoBehaviour
             ClearHighlight(selectedTool);
             selectedTool = null;
             SelectedToolName = null;
+            OnToolChanged?.Invoke(null);
             // JustClickedTool = true; // İstersen bunu da true yapabilirsin ki "click" algılansın
             // Ama genelde deselection için ayrıca bir şey yapmak gerekirse buraya eklenir.
             Debug.Log($"[ToolPalette] Deselected: {ve.name}");
@@ -263,6 +270,7 @@ public class ToolPaletteController : MonoBehaviour
 
         SelectedToolName = selectedTool.name;
         JustClickedTool  = true;
+        OnToolChanged?.Invoke(SelectedToolName);
 
         Debug.Log($"[ToolPalette] Selected: {selectedTool.name}");
     }

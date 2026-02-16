@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic; // List için
 using UnityEngine.Tilemaps; 
+using UnityEngine.UIElements; // UI Toolkit için gerekli 
 
 public class ClickToMove : MonoBehaviour
 {
@@ -48,10 +49,12 @@ public class ClickToMove : MonoBehaviour
     static readonly int SowTrigger = Animator.StringToHash("Tohum");
     static readonly int WaterTrigger = Animator.StringToHash("Water");
 
+    private UIDocument _uiDoc;
+
     void Awake()
     {
         if (animator == null) animator = GetComponentInChildren<Animator>();
-
+        _uiDoc = FindObjectOfType<UIDocument>();
     }
 
     void Update()
@@ -70,26 +73,10 @@ public class ClickToMove : MonoBehaviour
             // --- UI BLOCK CHECK START ---
             // EventSystem ile modern UI kontrolü
             // --- UI BLOCK CHECK START ---
-            // EventSystem ile modern UI kontrolü
-            if (UnityEngine.EventSystems.EventSystem.current != null)
+            if (IsPointerOverUI())
             {
-                if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-                {
-                    Debug.Log("UI Clicked (EventSystem)");
-                    
-                    // DEBUG: Hangi objenin tiklamayi kestigini bulalim
-                    var pointerData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
-                    pointerData.position = Input.mousePosition;
-                    var results = new List<UnityEngine.EventSystems.RaycastResult>();
-                    UnityEngine.EventSystems.EventSystem.current.RaycastAll(pointerData, results);
-                    
-                    if (results.Count > 0)
-                    {
-                        Debug.Log($"Blocking UI Element: {results[0].gameObject.name} (Layer: {LayerMask.LayerToName(results[0].gameObject.layer)})");
-                    }
-                    
-                    return;
-                }
+                Debug.Log("UI Clicked (Blocked Movement)");
+                return;
             }
             // --- UI BLOCK CHECK END ---
 
@@ -277,7 +264,7 @@ public class ClickToMove : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Dig şartları sağlanmadı: Cell:{cell} Grass:{tileOnGrass!=null}, NoGround:{tileOnGround==null}, NoSoil:{tileOnSoil==null}");
+                Debug.Log($"Dig şartları sağlanmadı: Cell:{cell} Grass:{tileOnGrass!=null}, NoGround:{tileOnGround==null}, NoSoil:{tileOnSoil==null} Visual:{tileOnVisual!=null}");
             }
         }
         // --- SOW (TOHUM) ---
@@ -372,10 +359,56 @@ public class ClickToMove : MonoBehaviour
         }
     }
     
-    // --- UI HELPERS ---
+    private bool IsPointerOverUI()
+    {
+        // 1. Standart UGUI / EventSystem Kontrolü
+        if (UnityEngine.EventSystems.EventSystem.current != null && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        {
+             // Detailed Debugging to find the specific object
+             var pointerData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
+             pointerData.position = Input.mousePosition;
+             var results = new List<UnityEngine.EventSystems.RaycastResult>();
+             UnityEngine.EventSystems.EventSystem.current.RaycastAll(pointerData, results);
+             
+             if (results.Count > 0)
+             {
+                 Debug.Log($"Blocked by EventSystem Object: '{results[0].gameObject.name}' (Layer: {LayerMask.LayerToName(results[0].gameObject.layer)})");
+             }
+             else
+             {
+                 Debug.Log("Blocked by EventSystem (IsPointerOverGameObject is true, but RaycastAll found nothing? Check EventSystem settings.)");
+             }
 
+            return true;
+        }
 
-    
+        // 2. UI Toolkit Kontrolü (Panel Picking)
+        if (_uiDoc == null) _uiDoc = FindObjectOfType<UIDocument>();
+        
+        if (_uiDoc != null && _uiDoc.rootVisualElement != null)
+        {
+            try 
+            {
+                Vector2 mousePos = Input.mousePosition;
+                Vector2 panelLocal = RuntimePanelUtils.ScreenToPanel(_uiDoc.rootVisualElement.panel, mousePos);
+                VisualElement picked = _uiDoc.rootVisualElement.panel.Pick(panelLocal);
+
+                // Eğer picked 'null' değilse ve 'root' değilse, bir butona/elemente basıldı demektir
+                if (picked != null && picked != _uiDoc.rootVisualElement)
+                {
+                    Debug.Log($"Blocked by UI Toolkit: {picked.name} ({picked.GetType().Name})");
+                    return true;
+                }
+            }
+            catch (System.Exception ex) 
+            { 
+                 Debug.LogWarning($"UI Check Error: {ex.Message}");
+            }
+        }
+
+        return false;
+    }
+
     // Debug amaçlı yolu çiz
     void OnDrawGizmos()
     {
