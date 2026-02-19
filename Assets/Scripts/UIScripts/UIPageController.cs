@@ -1,242 +1,155 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Collections.Generic;
 
+[RequireComponent(typeof(UIDocument))]
 public class UIPageController : MonoBehaviour
 {
-    [Header("Main HUD (Sample.uxml)")]
-    [SerializeField] private VisualTreeAsset hudUxml;
+    [Header("Page Assets")]
+    [SerializeField] private VisualTreeAsset profilePage;
+    [SerializeField] private VisualTreeAsset dealsPage;
+    [SerializeField] private VisualTreeAsset eventsPage;
+    [SerializeField] private VisualTreeAsset tasksPage;
+    [SerializeField] private VisualTreeAsset inventoryPage;
+    [SerializeField] private VisualTreeAsset storePage;
+    [SerializeField] private VisualTreeAsset friendsPage;
+    [SerializeField] private VisualTreeAsset settingsPage;
 
-    [Header("Feature Pages")]
-    [SerializeField] private VisualTreeAsset profileUxml;
-    [SerializeField] private VisualTreeAsset inventoryUxml;
-    [SerializeField] private VisualTreeAsset marketUxml;
-    [SerializeField] private VisualTreeAsset socialUxml;
-    [SerializeField] private VisualTreeAsset tasksUxml;
-    [SerializeField] private VisualTreeAsset eventsUxml;
-    [SerializeField] private VisualTreeAsset shopUxml; // Deals/Shop
-    [SerializeField] private VisualTreeAsset leaderboardUxml;
+    [Header("References")]
+    [SerializeField] private UIDocument uiDocument;
 
-    [Header("Settings Pages")]
-    [SerializeField] private VisualTreeAsset settingsUxml;
-    [SerializeField] private VisualTreeAsset gameSettingsUxml;
-    [SerializeField] private VisualTreeAsset languageUxml;
-    [SerializeField] private VisualTreeAsset supportUxml;
-    [SerializeField] private VisualTreeAsset termsUxml;
-    [SerializeField] private VisualTreeAsset linkAccountUxml;
-    [SerializeField] private VisualTreeAsset giftCodeUxml;
-    [SerializeField] private VisualTreeAsset privacyUxml;
-    [SerializeField] private VisualTreeAsset otherUxml;
+    private VisualElement _root;
+    
+    // Buttons
+    private Button _avatarButton;
+    private Button _dealsButton;
+    private Button _eventsButton;
+    private Button _tasksButton;
+    private Button _inventoryButton;
+    private Button _storeButton;
+    private Button _friendsButton;
+    private Button _bottomLeftButton; // Using as Settings for now, typically
 
-
-    private UIDocument uiDocument;
-    private VisualElement root;
-
-    // Keep track of the currently active page element if needed, 
-    // though usually root.Clear() is enough for a simple stack.
-    private VisualElement currentPageInstance;
+    // Currently open page container
+    private VisualElement _currentPageContainer;
 
     private void Awake()
     {
-        uiDocument = GetComponent<UIDocument>();
-        if (uiDocument == null) 
+        if (uiDocument == null) uiDocument = GetComponent<UIDocument>();
+    }
+
+    private void OnEnable()
+    {
+        if (uiDocument == null)
         {
-            Debug.LogError("UIPageController: UIDocument not found!");
-            return;
-        }
-        root = uiDocument.rootVisualElement;
-        
-        // IMPORTANT: Ensure root doesn't block raycasts when empty or has transparent gaps
-        root.pickingMode = PickingMode.Ignore; 
-    }
-
-    private void Start()
-    {
-        // Start with the Main HUD
-        ShowHUD();
-    }
-
-    // -------------------- NAVIGATION METHODS --------------------
-
-    public void ShowHUD()
-    {
-        LoadPage(hudUxml);
-
-        // Bind HUD Buttons (VisualElements acting as buttons)
-        // Note: Sample.uxml uses VisualElements with background images for buttons, not Button controls.
-        // We will use RegisterCallback<ClickEvent> on them.
-
-        // AvatarFrame -> Profile
-        BindClick("AvatarFrame", ShowProfile);
-
-        // InventoryButton -> Inventory
-        BindClick("InventoryButton", ShowInventory);
-
-        // StoreButton -> Market
-        BindClick("StoreButton", ShowMarket);
-
-        // FriendsButton -> SocialView
-        BindClick("FriendsButton", ShowSocial);
-
-        // Tasks -> TasksPage
-        BindClick("Tasks", ShowTasks);
-
-        // Events -> EventsPage
-        BindClick("Events", ShowEvents);
-
-        // Deals -> ShopUI
-        BindClick("Deals", ShowShop);
-    }
-
-    public void ShowProfile()
-    {
-        LoadPage(profileUxml);
-
-        // Profile Navigation
-        BindClick("NavBtn1", ShowLeaderboard); // Liderlik
-        BindClick("NavBtn2", ShowSettings);    // Ayarlar
-            
-        // Close / Back Logic
-        BindClick("CloseBtn", ShowHUD); 
-        BindClick("BackButton", ShowHUD);
-        BindClick("BackBtn", ShowHUD);
-    }
-
-    public void ShowInventory()
-    {
-        LoadPage(inventoryUxml);
-        BindClick("CloseBtn", ShowHUD);
-        BindClick("BackButton", ShowHUD);
-        BindClick("BackBtn", ShowHUD);
-    }
-
-    public void ShowMarket()
-    {
-        LoadPage(marketUxml);
-        BindClick("CloseBtn", ShowHUD);
-        BindClick("BackButton", ShowHUD);
-        BindClick("BackBtn", ShowHUD);
-    }
-
-    public void ShowSocial()
-    {
-        LoadPage(socialUxml);
-        BindClick("CloseBtn", ShowHUD);
-        BindClick("BackButton", ShowHUD);
-        BindClick("BackBtn", ShowHUD);
-    }
-
-    public void ShowTasks()
-    {
-        LoadPage(tasksUxml);
-        BindClick("CloseBtn", ShowHUD);
-        BindClick("BackButton", ShowHUD);
-        BindClick("BackBtn", ShowHUD);
-    }
-
-    public void ShowEvents()
-    {
-        LoadPage(eventsUxml);
-        BindClick("CloseBtn", ShowHUD);
-        BindClick("BackButton", ShowHUD);
-        BindClick("BackBtn", ShowHUD);
-    }
-
-    public void ShowShop()
-    {
-        LoadPage(shopUxml);
-        BindClick("CloseBtn", ShowHUD);
-        BindClick("BackButton", ShowHUD);
-        BindClick("BackBtn", ShowHUD);
-    }
-
-    public void ShowLeaderboard()
-    {
-        LoadPage(leaderboardUxml);
-        BindClick("BackButton", ShowProfile);
-        BindClick("BackBtn", ShowProfile);
-    }
-
-    public void ShowSettings()
-    {
-        LoadPage(settingsUxml);
-
-        BindClick("BackToProfileBtn", ShowProfile);
-
-        // Settings Sub-pages
-        BindClick("BtnGameSettings", () => LoadSubPage(gameSettingsUxml, "Oyun Ayarları"));
-        BindClick("BtnLanguage",     () => LoadSubPage(languageUxml, "Dil"));
-        BindClick("BtnSupport",      () => LoadSubPage(supportUxml, "Destek"));
-        BindClick("BtnTerms",        () => LoadSubPage(termsUxml, "Hizmet Şartları"));
-        BindClick("BtnLinkAccount",  () => LoadSubPage(linkAccountUxml, "Hesap Bağlama"));
-        BindClick("BtnGiftCode",     () => LoadSubPage(giftCodeUxml, "Hediye Kodu"));
-        BindClick("BtnPrivacy",      () => LoadSubPage(privacyUxml, "Gizlilik Politikası"));
-        BindClick("BtnOther",        () => LoadSubPage(otherUxml, "Diğer"));
-    }
-
-    // -------------------- HELPER METHODS --------------------
-
-    private void LoadPage(VisualTreeAsset pageUxml)
-    {
-        root.Clear();
-        if (pageUxml == null)
-        {
-            // If hudUxml is null, we might just end up with empty screen (desirable if purely testing blocking)
-            // But warn just in case actions were expected.
-            Debug.LogWarning("UIPageController: Requested page UXML is null.");
+            Debug.LogError("UIPageController: No UIDocument found!");
             return;
         }
 
-        currentPageInstance = pageUxml.Instantiate();
-        
-        // Ensure the loaded page container expands to fill screen if it's a full page
-        // But for Sample.uxml (HUD), it might be separate bars. 
-        // We generally want the instantiated content to fill root.
-        currentPageInstance.style.flexGrow = 1;
-        currentPageInstance.pickingMode = PickingMode.Ignore; // Let children decide blocking
+        _root = uiDocument.rootVisualElement;
+        if (_root == null) return;
 
-        root.Add(currentPageInstance);
+        // Find Buttons
+        _avatarButton = _root.Q<Button>("AvatarFrame");
+        _dealsButton = _root.Q<Button>("Deals");
+        _eventsButton = _root.Q<Button>("Events");
+        _tasksButton = _root.Q<Button>("Tasks");
+        _inventoryButton = _root.Q<Button>("InventoryButton");
+        _storeButton = _root.Q<Button>("StoreButton");
+        _friendsButton = _root.Q<Button>("FriendsButton");
+        _bottomLeftButton = _root.Q<Button>("BottomLeftButton");
+
+        // Register Callbacks
+        _avatarButton?.RegisterCallback<ClickEvent>(evt => OpenPage(profilePage));
+        _dealsButton?.RegisterCallback<ClickEvent>(evt => OpenPage(dealsPage));
+        _eventsButton?.RegisterCallback<ClickEvent>(evt => OpenPage(eventsPage));
+        _tasksButton?.RegisterCallback<ClickEvent>(evt => OpenPage(tasksPage));
+        _inventoryButton?.RegisterCallback<ClickEvent>(evt => OpenPage(inventoryPage));
+        _storeButton?.RegisterCallback<ClickEvent>(evt => OpenPage(storePage));
+        _friendsButton?.RegisterCallback<ClickEvent>(evt => OpenPage(friendsPage));
+        _bottomLeftButton?.RegisterCallback<ClickEvent>(evt => OpenPage(settingsPage));
     }
 
-    private void LoadSubPage(VisualTreeAsset subPageUxml, string title)
+    private void OnDisable()
     {
-        LoadPage(subPageUxml);
-
-        // Back to Settings
-        BindClick("BackButton", ShowSettings);
-        BindClick("BackBtn", ShowSettings);
-        BindClick("CloseBtn", ShowHUD); // Optional: global close
-
-        // Check if there is a title label to update
-        var titleLabel = root.Q<Label>("Title"); // Assuming standard naming
-        if (titleLabel != null) titleLabel.text = title;
+        // Ideally unregister callbacks here to prevent memory leaks if the root is kept alive
+        // causing double registrations on re-enable, but for simple UI it's often skipped.
+        // Good practice:
+        _avatarButton?.UnregisterCallback<ClickEvent>(evt => OpenPage(profilePage));
+        // ... (repeating for all is tedious without a helper, but safe)
     }
 
-    /// <summary>
-    /// Binds a ClickEvent to a VisualElement (Button or any VE).
-    /// </summary>
-    private void BindClick(string elemName, System.Action onClick)
+    private void OpenPage(VisualTreeAsset pageAsset)
     {
-        var elem = root.Q<VisualElement>(elemName);
-        if (elem != null)
+        if (pageAsset == null)
         {
-            // Remove existing callbacks to avoid double-binding if we reload pages weirdly,
-            // though root.Clear() usually handles cleanup of the visual hierarchy.
-            // But C# lambdas might stick if we re-query? No, new instance = new elements.
-            
-            // Allow clicking on VisualElements (like Images/containers in Sample.uxml)
-            elem.RegisterCallback<ClickEvent>(evt => 
-            {
-                onClick?.Invoke();
-                evt.StopImmediatePropagation(); // Consuming the click is usually good for UI buttons
-            });
+            Debug.LogWarning("UIPageController: Target page asset is null. Please assign it in the Inspector.");
+            return;
         }
-        else
+
+        // Close existing page if any
+        if (_currentPageContainer != null)
         {
-            // Optional: Log only if we expect it to be there. 
-            // For generic "CloseBtn", it might not exist on all pages, so maybe suppress warning or keep it for debug.
-            // Debug.LogWarning($"UIPageController: Element not found: {elemName}");
+            _root.Remove(_currentPageContainer);
+            _currentPageContainer = null;
+        }
+
+        // Instantiate new page
+        TemplateContainer pageInstance = pageAsset.Instantiate();
+        pageInstance.style.flexGrow = 1;
+        pageInstance.style.position = Position.Absolute;
+        pageInstance.style.top = 0;
+        pageInstance.style.bottom = 0;
+        pageInstance.style.left = 0;
+        pageInstance.style.right = 0;
+        
+        // Add to root
+        _root.Add(pageInstance);
+        _currentPageContainer = pageInstance;
+
+        // Optional: Find a "Close" or "Back" button inside the new page to close it
+        var closeBtn = pageInstance.Q<Button>("CloseButton"); 
+        if (closeBtn != null)
+        {
+            closeBtn.RegisterCallback<ClickEvent>(evt => CloseCurrentPage());
+        }
+        
+        // Also check for "BackBtn" as per previous conventions
+        var backBtn = pageInstance.Q<Button>("BackBtn");
+        if (backBtn != null)
+        {
+            backBtn.RegisterCallback<ClickEvent>(evt => CloseCurrentPage());
+        }
+
+        // Also check for "BackButton" (e.g. InventoryScreen)
+        var backButtonFull = pageInstance.Q<Button>("BackButton");
+        if (backButtonFull != null)
+        {
+            backButtonFull.RegisterCallback<ClickEvent>(evt => CloseCurrentPage());
+        }
+
+        // Check for "CloseBtn" (ProfileScreen, SeedPopup)
+        var closeBtnShort = pageInstance.Q<Button>("CloseBtn");
+        if (closeBtnShort != null)
+        {
+            closeBtnShort.RegisterCallback<ClickEvent>(evt => CloseCurrentPage());
+        }
+
+        // Check for "BackToProfileBtn" (SettingsScreen)
+        var backToProfile = pageInstance.Q<Button>("BackToProfileBtn");
+        if (backToProfile != null)
+        {
+            backToProfile.RegisterCallback<ClickEvent>(evt => CloseCurrentPage());
+        }
+    }
+
+    public void CloseCurrentPage()
+    {
+        if (_currentPageContainer != null)
+        {
+            _root.Remove(_currentPageContainer);
+            _currentPageContainer = null;
         }
     }
 }
-

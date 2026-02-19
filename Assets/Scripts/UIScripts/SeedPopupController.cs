@@ -64,6 +64,7 @@ public class SeedPopupController : MonoBehaviour
         ToolPaletteController.OnToolChanged += OnToolChanged;
 
         // Init List
+        if(rowTemplate != null) rowTemplate.style.display = DisplayStyle.None; // Hide template at runtime
         PopulateList();
 
         // Start Closed
@@ -80,23 +81,14 @@ public class SeedPopupController : MonoBehaviour
 
     private void OnToolChanged(string toolName)
     {
+        Debug.Log($"[SeedPopupController] OnToolChanged received: '{toolName}'");
+
         if (!string.IsNullOrEmpty(toolName) && (toolName.Contains("Seed") || toolName.Contains("Tohum")))
         {
-            // Toggle logic: if already open and clicked again?
-            // User requested: "Seed tool'a ikinci kez tıkla -> popup tekrar açılmalı"
-            // Usually if I click the same tool, ToolPalette might re-fire or deselect.
-            // If ToolPalette logic deselects on second click, toolName becomes null.
-            // If ToolPalette logic keeps it selected, we might want to toggle?
-            // For now, if "Seed" is selected, we Open.
-            
-            // NOTE: If user clicks Seed while Seed is already active, ToolPalette usually does nothing or re-selects.
-            // If we want toggle behavior on re-click, ToolPalette needs to handle that.
-            // Assuming "Selected" event means "It is now active".
             OpenPopup();
         }
         else
         {
-            // Any other tool or null -> Close
             ClosePopup();
         }
     }
@@ -128,10 +120,6 @@ public class SeedPopupController : MonoBehaviour
     private void PopulateList()
     {
         // Clear existing items except template
-        // Note: Template is inside seedListContainer.
-        // We iterate backwards to remove generated items.
-        
-        // Identify generated items by user data or just remove all except template
         for (int i = seedListContainer.childCount - 1; i >= 0; i--)
         {
             var child = seedListContainer[i];
@@ -144,45 +132,26 @@ public class SeedPopupController : MonoBehaviour
         // Generate Rows
         foreach (var data in dummySeeds)
         {
-
-            // If rowTemplate is a Button in UXML, CloneTree might wrap it? 
-            // Actually, Instantiate logic:
-            // TemplateContainer tc = rowTemplate.CloneTree(); 
-            // OR if rowTemplate is just a VisualElement in the tree:
-            
-            // "Template" approach in code: usually we have a specific .uxml for rows.
-            // But since we are doing inline cloning of an existing element:
-            // We can manually copy properties or use a different method.
-            // Since we can't easily "Clone" an element that is part of the tree without UXML template logic,
-            // A common trick:
-            
-            // Better approach for inline template:
-            // Create a new Button, copy classes.
-            
             Button newRow = new Button();
             newRow.AddToClassList("seed-row");
-            newRow.style.display = DisplayStyle.Flex; // Make visible
+            newRow.style.width = 180f; // Force width from script to be safe
+            newRow.style.display = DisplayStyle.Flex; 
             
-            // Structure
-            var icon = new VisualElement();
-            icon.AddToClassList("seed-icon");
-            newRow.Add(icon);
-
-            var textCol = new VisualElement();
-            textCol.AddToClassList("text-col");
-            newRow.Add(textCol);
-
-            var nameLbl = new Label(data.name);
-            nameLbl.AddToClassList("name-label");
-            textCol.Add(nameLbl);
-
-            var priceLbl = new Label(data.price);
-            priceLbl.AddToClassList("price-label");
-            textCol.Add(priceLbl);
-
+            // 1. Text overlay for selection
             var mark = new Label("✓");
             mark.AddToClassList("selected-mark");
             newRow.Add(mark);
+
+            // 2. Icon (Big)
+            var icon = new VisualElement();
+            icon.AddToClassList("seed-icon");
+            // Setup dummy image or sprite if available
+            newRow.Add(icon);
+
+            // 3. Name (Bottom)
+            var nameLbl = new Label(data.name);
+            nameLbl.AddToClassList("name-label");
+            newRow.Add(nameLbl);
 
             // Data
             newRow.userData = data.name;

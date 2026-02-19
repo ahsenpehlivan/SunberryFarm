@@ -423,6 +423,7 @@ GameObject:
   - component: {fileID: 206034082}
   - component: {fileID: 206034081}
   - component: {fileID: 206034084}
+  - component: {fileID: 206034085}
   m_Layer: 5
   m_Name: MainUI
   m_TagString: Untagged
@@ -489,6 +490,27 @@ MonoBehaviour:
   highlightBorderPx: 4
   highlightColor: {r: 1, g: 0.93, b: 0.63, a: 1}
   highlightGlow: {r: 1, g: 1, b: 0.8, a: 0.25}
+--- !u!114 &206034085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206034080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3affcdd15347d03428fb4111cf982658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIPageController
+  profilePage: {fileID: 9197481963319205126, guid: 3f4259ccec9d94c4baa183431c17baa6, type: 3}
+  dealsPage: {fileID: 9197481963319205126, guid: 3dd5441815a59b14a89b395b42048f46, type: 3}
+  eventsPage: {fileID: 9197481963319205126, guid: a2b831c6a80a54949b2edebc5f608a99, type: 3}
+  tasksPage: {fileID: 9197481963319205126, guid: 8f3b0aa7bae852e47ab5b72eba83f593, type: 3}
+  inventoryPage: {fileID: 9197481963319205126, guid: 9616390c31956c84aa7d60b0424993b3, type: 3}
+  storePage: {fileID: 9197481963319205126, guid: cbd4dbbc2772e424e9aa38260c5043f1, type: 3}
+  friendsPage: {fileID: 9197481963319205126, guid: 8180866c33a05d446a5c878be0429b41, type: 3}
+  settingsPage: {fileID: 9197481963319205126, guid: 11d54c12c51b33a44b985f2dbb199315, type: 3}
+  uiDocument: {fileID: 206034081}
 --- !u!1 &418443717
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,7 +889,7 @@ GameObject:
   - component: {fileID: 856921281}
   - component: {fileID: 856921282}
   m_Layer: 5
-  m_Name: Leaderboard
+  m_Name: LeaderboardUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -902,7 +924,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: ed18be2fe1424f94e8fc14c9590172d4, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 5e2096986a4cb3549a4e39dbf5655f15, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -3050,14 +3072,69 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141445995}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: ed18be2fe1424f94e8fc14c9590172d4, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 24798b96a871e0443bbd3dc8f5303ce3, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: cbd4dbbc2772e424e9aa38260c5043f1, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!1 &1194633153
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1194633154}
+  - component: {fileID: 1194633155}
+  m_Layer: 5
+  m_Name: TasksUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1194633154
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194633153}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.010498, y: 30.405811, z: -224.47305}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1913643172}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1194633155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194633153}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: ed18be2fe1424f94e8fc14c9590172d4, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 8f3b0aa7bae852e47ab5b72eba83f593, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -19604,7 +19681,7 @@ GameObject:
   - component: {fileID: 1431107182}
   - component: {fileID: 1431107183}
   m_Layer: 0
-  m_Name: Settings
+  m_Name: SettingsUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19639,7 +19716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: ed18be2fe1424f94e8fc14c9590172d4, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: bb5e2b57144744f4c9e64ecf8add786a, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -19694,7 +19771,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: ed18be2fe1424f94e8fc14c9590172d4, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 88f8dd7643d21534e930f07ffe0b999e, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 8180866c33a05d446a5c878be0429b41, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -21121,7 +21198,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1902065768
+--- !u!1 &1897136190
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -21129,38 +21206,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1902065769}
-  - component: {fileID: 1902065770}
-  - component: {fileID: 1902065771}
-  m_Layer: 0
-  m_Name: ShopUI
+  - component: {fileID: 1897136191}
+  - component: {fileID: 1897136192}
+  m_Layer: 5
+  m_Name: EventUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1902065769
+--- !u!4 &1897136191
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1902065768}
+  m_GameObject: {fileID: 1897136190}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.010498, y: 30.405811, z: -224.47305}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1913643172}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1902065770
+--- !u!114 &1897136192
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1902065768}
+  m_GameObject: {fileID: 1897136190}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
@@ -21168,7 +21244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: ed18be2fe1424f94e8fc14c9590172d4, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 8a631d08cc6eed4449fd0438600b2844, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: a2b831c6a80a54949b2edebc5f608a99, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -21177,19 +21253,6 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
---- !u!114 &1902065771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1902065768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 540d94144aa6d7843bf97f074b846212, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopTabsController
-  doc: {fileID: 1902065770}
 --- !u!1 &1913643171
 GameObject:
   m_ObjectHideFlags: 0
@@ -21219,6 +21282,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1897136191}
+  - {fileID: 1194633154}
   - {fileID: 206034082}
   - {fileID: 618708111}
   - {fileID: 1141445996}
@@ -21226,7 +21291,6 @@ Transform:
   - {fileID: 2103178522}
   - {fileID: 856921281}
   - {fileID: 1431107182}
-  - {fileID: 1902065769}
   - {fileID: 1413844428}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21240,9 +21304,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2103178522}
   - component: {fileID: 2103178523}
-  - component: {fileID: 2103178524}
   m_Layer: 0
-  m_Name: Profil
+  m_Name: ProfileUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21286,36 +21349,6 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
---- !u!114 &2103178524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2103178521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3affcdd15347d03428fb4111cf982658, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIPageController
-  hudUxml: {fileID: 0}
-  profileUxml: {fileID: 9197481963319205126, guid: 3f4259ccec9d94c4baa183431c17baa6, type: 3}
-  inventoryUxml: {fileID: 0}
-  marketUxml: {fileID: 0}
-  socialUxml: {fileID: 0}
-  tasksUxml: {fileID: 0}
-  eventsUxml: {fileID: 0}
-  shopUxml: {fileID: 0}
-  leaderboardUxml: {fileID: 9197481963319205126, guid: 5e2096986a4cb3549a4e39dbf5655f15, type: 3}
-  settingsUxml: {fileID: 0}
-  gameSettingsUxml: {fileID: 0}
-  languageUxml: {fileID: 0}
-  supportUxml: {fileID: 0}
-  termsUxml: {fileID: 0}
-  linkAccountUxml: {fileID: 0}
-  giftCodeUxml: {fileID: 0}
-  privacyUxml: {fileID: 0}
-  otherUxml: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

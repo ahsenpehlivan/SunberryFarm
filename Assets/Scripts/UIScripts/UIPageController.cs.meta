@@ -1,22 +1,2 @@
 fileFormatVersion: 2
 guid: 3affcdd15347d03428fb4111cf982658
-MonoImporter:
-  externalObjects: {}
-  serializedVersion: 2
-  defaultReferences:
-  - profileUxml: {fileID: 9197481963319205126, guid: 3f4259ccec9d94c4baa183431c17baa6, type: 3}
-  - leaderboardUxml: {fileID: 9197481963319205126, guid: 5e2096986a4cb3549a4e39dbf5655f15, type: 3}
-  - settingsUxml: {fileID: 9197481963319205126, guid: 11d54c12c51b33a44b985f2dbb199315, type: 3}
-  - gameSettingsUxml: {instanceID: 0}
-  - languageUxml: {instanceID: 0}
-  - supportUxml: {instanceID: 0}
-  - termsUxml: {instanceID: 0}
-  - linkAccountUxml: {instanceID: 0}
-  - giftCodeUxml: {instanceID: 0}
-  - privacyUxml: {instanceID: 0}
-  - otherUxml: {instanceID: 0}
-  executionOrder: 0
-  icon: {instanceID: 0}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
