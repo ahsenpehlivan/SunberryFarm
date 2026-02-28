@@ -244,9 +244,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb50b15046f27b04bb547118692e3a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoginUIManager
-  uiDocument: {fileID: 343250304}
+  uiDocument: {fileID: 586670811}
   loadingPageAsset: {fileID: 9197481963319205126, guid: 06c8722ff80f9f54f968f6d79ea9199d, type: 3}
   createProfilePageAsset: {fileID: 9197481963319205126, guid: c2e805440851a264fac76bef5bdaa04d, type: 3}
+  idLoginPageAsset: {fileID: 9197481963319205126, guid: ff8ad4eba37c0594ab9564deaa442b6f, type: 3}
   homeSceneName: SampleScene
   avatarDataList: {fileID: 11400000, guid: eb93971796ce2204d97897415759c52f, type: 2}
 --- !u!1 &586670810
