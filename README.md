@@ -1,9 +1,10 @@
-# Unity 2D Farming Game – Technical Showcase Repository
+# Farm Sunberry
 
-This repository contains a **limited, showcase-focused version** of a 2D mobile farming game developed in **Unity (C#)**.
+![Unity](https://img.shields.io/badge/Unity-2D%20Game-000000?logo=unity&logoColor=white) ![C#](https://img.shields.io/badge/C%23-Gameplay-512BD4?logo=csharp&logoColor=white) ![Google Play](https://img.shields.io/badge/Google%20Play-Published-34A853?logo=googleplay&logoColor=white)
 
-The primary purpose of this repository is **to demonstrate my technical skills, code quality, and system architecture** during recruitment processes.  
-It is **not** intended to represent the full production repository of the game.
+A mobile farming game developed in Unity and C#. This repository shares a **limited technical showcase** of the gameplay code and architecture for portfolio review; it is not the complete production project.
+
+**[Play Farm Sunberry on Google Play ↗](https://play.google.com/store/apps/details?id=com.sunberry.farm)**
 
 ---
 
