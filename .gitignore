@@ -113,3 +113,10 @@ crashlytics-build.properties
 Assets/Firebase/Plugins/**
 Assets/Plugins
 /Assets/_Game/Scripts/Online
+
+# Local workspace and generated editor files
+/.plastic/
+/Assets/_Recovery/
+/UIElementsSchema/
+/debug.log
+/ignore.conf
