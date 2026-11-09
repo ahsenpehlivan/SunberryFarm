@@ -120,3 +120,7 @@ Assets/Plugins
 /UIElementsSchema/
 /debug.log
 /ignore.conf
+
+# Keep the public repository as a code showcase
+/Assets/Scenes/
+/Assets/Settings/Lit2DSceneTemplate.scenetemplate*
